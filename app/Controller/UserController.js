@@ -34,7 +34,8 @@ module.exports = {
     UserHandler.register(user).then(data => {
       res.json({
         status: 1,
-        user: data
+        user: data,
+        msg: null
       });
     }).catch(err => {
       res.json(ResponseUtil.err(err))
@@ -51,7 +52,15 @@ module.exports = {
     UserHandler.login(user).then(data => {
       res.json(data);
     }).catch(err => {
-      res.json(ResponseUtil.err(err));
+      res.json({
+        status: 0,
+        user: null,
+        msg: err
+      });
     })
+  },
+
+  getUser: (req, res) => {
+    res.json(req.user);
   }
 }

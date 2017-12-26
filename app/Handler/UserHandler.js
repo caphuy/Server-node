@@ -1,12 +1,12 @@
 'use strict';
 
-var Model = require('../Model/Models'),
-    bcrypt = require('bcrypt'),
-    jwt = require('jsonwebtoken'),
-    UtilConfig = require('../Config/UtilConfig'),
-    BaseUtil = require('../Util/BaseUtil')
-    
+const Model = require('../Model/Models'),
+      bcrypt = require('bcrypt'),
+      jwt = require('jsonwebtoken'),
+      UtilConfig = require('../Config/UtilConfig'),
+      BaseUtil = require('../Util/BaseUtil')
 
+      
 const saltRounds = 10;
 
 
@@ -27,11 +27,12 @@ module.exports = {
     if (user.username === undefined || user.password === undefined) {
       return {
         status: 0,
-        msg: 'lack of info'
+        msg: 'lack of info',
+        user: null
       }
     } else {
       let userFinded = await this.getUserByUsername(user.username);
-      if (userFinded !== undefined) {
+      if (userFinded !== undefined && userFinded !== null) {
         let compare = bcrypt.compareSync(user.password, userFinded.password);
         if (compare === true) {
           let token = await jwt.sign({
@@ -41,17 +42,21 @@ module.exports = {
           return {
             status: 1,
             token: token,
+            user: userFinded,
+            msg: null
           };
         } else {
           return {
             status: 0,
-            msg: 'wrong password'
+            msg: 'wrong password',
+            user: null
           };
         }
       } else {
         return {
           status: 0,
-          msg: 'wrong password'
+          msg: 'user invalid',
+          user: null
         };
       }
     }
@@ -59,5 +64,10 @@ module.exports = {
 
   getUserByUsername(username) {
     return Model.user.findOne({username: username});
-  }
+  },
+
+  getUserByRfid(rfid) {
+    return Model.user.findOne({"details.rfid": rfid});
+  },
+
 }

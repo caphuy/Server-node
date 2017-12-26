@@ -1,6 +1,6 @@
-var express = require('express'),
-    router = express.Router(),
-    RoomController = require('../Controller/RoomController')
+const express = require('express'),
+			router = express.Router(),
+			RoomController = require('../Controller/RoomController')
 
 router.post('/add', RoomController.add);
 

@@ -5,7 +5,12 @@ var Model = require('../Model/Models'),
 
 module.exports = {
 
-  async add(room) {
+  add(room) {
     return Model.room.create(room);
-  }
+  },
+
+  getRoomById(id) {
+    return Model.room.findById(id);
+  },
+
 }

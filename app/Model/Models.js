@@ -1,6 +1,6 @@
 'use strict';
 
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 module.exports = {
 
@@ -37,10 +37,19 @@ module.exports = {
   chair: mongoose.model('Chair', mongoose.Schema({
     id: Number,
     room: mongoose.Schema.Types.ObjectId,
-    user: mongoose.Schema.Types.ObjectId
+    user: mongoose.Schema.Types.ObjectId,
+    location: {
+      x: Number,
+      y: Number
+    },
+    status: {
+      type: Boolean,
+      default: false
+    }
   })),
 
   class: mongoose.model('Class', mongoose.Schema({
+    name: String,
     subject: mongoose.Schema.Types.ObjectId,
     lecture: mongoose.Schema.Types.ObjectId,
     room: mongoose.Schema.Types.ObjectId,
@@ -54,8 +63,52 @@ module.exports = {
   })),
 
   class_detail: mongoose.model('Class_detail', mongoose.Schema({
-    class: mongoose.Schema.ObjectId,
-    user: mongoose.Schema.ObjectId
-  }))
+    class: mongoose.Schema.Types.ObjectId,
+    user: mongoose.Schema.Types.ObjectId
+  })),
 
+  class_log: mongoose.model('Class_log', mongoose.Schema({
+    room: mongoose.Schema.Types.ObjectId,
+    start: Date,
+    end: Date,
+    duration: Number,
+    user: mongoose.Schema.Types.ObjectId,
+    chair: Number
+  })),
+
+  roll_up: mongoose.model('Roll_up', mongoose.Schema({
+    class: mongoose.Schema.Types.ObjectId,
+    user: mongoose.Schema.Types.ObjectId,
+    status: Boolean,
+    date: Date
+  })),
+
+  setting: mongoose.model('Setting', mongoose.Schema({
+    room: mongoose.Schema.Types.ObjectId,
+    width: Number,
+    height: Number,
+    n: Number,
+    A1: Number,
+    A2: Number,
+    A3: Number,
+    column: Number,
+    lim_weight: Number
+  })),
+
+  calendar: mongoose.model('Calendar', mongoose.Schema({
+    class: mongoose.Schema.Types.ObjectId,
+    time: Date
+  })),
+
+  point: mongoose.model('Point', mongoose.Schema({
+    student: mongoose.Schema.Types.ObjectId,
+    class: mongoose.Schema.Types.ObjectId,
+    type: Number, //1: CC; 2: HS1; 3: HS2; 4: HK
+    value: Number,
+  })),
+
+  like: mongoose.model('Like', mongoose.Schema({
+    lecture: mongoose.Schema.Types.ObjectId,
+    student: mongoose.Schema.Types.ObjectId
+  }))
 }
